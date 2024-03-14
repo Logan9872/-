@@ -3,6 +3,7 @@
 This project aims to replicate the model of running energy consumption as part of my doctoral thesis. 
 The goal is to understand the dynamics of energy expenditure during running, incorporating various factors such as speed, distance, and runner's physiology.
 This replication study seeks to validate previous findings and explore potential improvements in the modeling approach.
+Paper URL: https://doi.org/10.1371/journal.pone.0206645
 
 # Objectives
 To replicate the existing model of running energy consumption.
