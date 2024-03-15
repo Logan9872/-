@@ -1,36 +1,38 @@
 import numpy as np
 import mpmath as mt
-from scipy.optimize import minimize, curve_fit
+from scipy.optimize import minimize
 import pandas as pd
 import matplotlib.pyplot as plt
-# 读取数据
 
-# [输入格式：（距离，时间），距离单位：米，时间格式：hh：mm：ss]
-history_data = [
-    {'dist': 1000, 'time': '2:12.82'}, {'dist': 1500, 'time': '3:29.46'},
-    {'dist': 1609.34, 'time': '3:46.32'}, {'dist': 3000, 'time': '7:29.45'},
-    {'dist': 5000, 'time': '12:58.39'}, {'dist': 10000, 'time': '27:08.23'}
-]
+# Load the CSV file
+csv_path = 'D:/Users/11619/PycharmProjects/跑步记录爬取/数据/筛选后的数据/men_performance_seconds1.csv'  # 请根据实际文件路径进行修改
+data_csv = pd.read_csv(csv_path)
 
+# Convert CSV data to the required format
+def convert_to_specified_format(df):
+    athlete_id = df.iloc[0]['athleteid']
+    formatted_data = {
+        "id": int(athlete_id),
+        "data": []
+    }
+    distances = {'5000': 5000, '10000': 10000, '16093': 16093, '21097': 21097, '42195': 42195}
+    for _, row in df.iterrows():
+        for dist_column, meters in distances.items():
+            time_sec = str(int(row[dist_column])) if not pd.isnull(row[dist_column]) else '0'
+            formatted_data["data"].append({"dist": meters, "time": time_sec})
+        break  # Assuming only one athlete's data is needed
+    return formatted_data
 
-# 将时间字符串转换为秒
-def time_to_seconds(time_str):
-    minutes, seconds = map(float, time_str.split(':'))
-    return minutes * 60 + seconds
-
+history_data_converted = convert_to_specified_format(data_csv)
 
 # 将数据转换为DataFrame
-data = pd.DataFrame(history_data)
-data['time_sec'] = data['time'].apply(time_to_seconds)
+data = pd.DataFrame(history_data_converted['data'])
+data['time_sec'] = data['time'].astype(int)  # 转换时间为秒
 
+# 自定义非线性模型函数，定义时间预测函数等...
 
-# 自定义非线性模型函数
-# 定义时间预测函数
 def time_fct(params, dist):
-    # params: [vm,，gl, gs，tc]
-    # dist: 距离数组
-    vm, gl, tc, gs= params
-    # 假设的常量时间
+    vm, gl, tc, gs = params
     dc = vm * tc
     time_pred = np.zeros_like(dist)
     for i, d in enumerate(dist):

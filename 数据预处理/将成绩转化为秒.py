@@ -45,5 +45,5 @@ for column, time_format in column_formats.items():
     df_women_performance[column] = df_women_performance[column].apply(lambda x: convert_to_seconds(x, column))
 
 # Save the converted data
-df_men_performance.to_csv('D:/Users/11619/PycharmProjects/跑步记录爬取/数据/筛选后的数据/men_performance_seconds.csv', index=False)
-df_women_performance.to_csv('D:/Users/11619/PycharmProjects/跑步记录爬取/数据/筛选后的数据/women_performance_seconds.csv', index=False)
+# df_men_performance.to_csv('D:/Users/11619/PycharmProjects/跑步记录爬取/数据/筛选后的数据/men_performance_seconds.csv', index=False)
+df_women_performance.to_csv('D:/Users/11619/PycharmProjects/跑步记录爬取/数据/筛选后的数据/women_performance_seconds1.csv', index=False)
