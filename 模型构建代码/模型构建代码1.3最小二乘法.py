@@ -4,7 +4,8 @@ from scipy.optimize import minimize
 import pandas as pd
 import matplotlib.pyplot as plt
 import itertools
-
+import numpy as np
+from scipy.optimize import least_squares
 # Load the CSV file
 # csv_path = 'D:/Users/11619/PycharmProjects/跑步记录爬取/数据/筛选后的数据/men_performance_seconds1.csv'  # 请根据实际文件路径进行修改
 csv_path = 'D:/Users/11619/PycharmProjects/跑步记录爬取/数据/筛选后的数据/women_performance_seconds1.csv'  # 请根据实际文件路径进行修改
@@ -30,15 +31,31 @@ def time_fct(params, dist):
 param_bounds = ((2, 7), (0.05, 0.135), (300, 420), (0.08, 0.2))
 
 # 定义一个函数来执行非线性最小二乘拟合
+
 def nls_fit(dist, times, param_bounds, num_starts=10):
     best_result = None
+    # 定义残差函数
+    def residuals(params, dist, times):
+        return times - time_fct(params, dist)
     for _ in range(num_starts):
         params0 = [np.random.uniform(low, high) for low, high in param_bounds]
-        result = minimize(lambda params: np.sum((times - time_fct(params, dist)) ** 2),
-                          params0, bounds=param_bounds, method='L-BFGS-B')
-        if best_result is None or result.fun < best_result.fun:
+        # 使用least_squares
+        result = least_squares(residuals, params0, bounds=np.transpose(param_bounds), args=(dist, times))
+        # 检查并更新最佳结果
+        if best_result is None or result.cost < best_result.cost:
             best_result = result
+
     return best_result.x
+
+# def nls_fit(dist, times, param_bounds, num_starts=10):
+#     best_result = None
+#     for _ in range(num_starts):
+#         params0 = [np.random.uniform(low, high) for low, high in param_bounds]
+#         result = minimize(lambda params: np.sum((times - time_fct(params, dist)) ** 2),
+#                           params0, bounds=param_bounds, method='L-BFGS-B')
+#         if best_result is None or result.fun < best_result.fun:
+#             best_result = result
+#     return best_result.x
 
 # 准备绘图
 plt.figure(figsize=(10, 6))

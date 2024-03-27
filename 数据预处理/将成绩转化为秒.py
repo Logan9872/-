@@ -1,8 +1,8 @@
 import pandas as pd
 
 # Load the performance data for men and women
-df_men_performance = pd.read_csv('/数据/筛选后的数据/men_performance.csv')
-df_women_performance = pd.read_csv('/数据/筛选后的数据/women_performance.csv')
+df_men_performance = pd.read_csv('D:/Users/11619/PycharmProjects/跑步记录爬取/数据/筛选后的数据/men_performance.csv')
+df_women_performance = pd.read_csv('D:/Users/11619/PycharmProjects/跑步记录爬取/数据/筛选后的数据/women_performance.csv')
 
 # Corrected conversion function to handle numeric values as well
 def convert_to_seconds(time_value, column):
@@ -45,5 +45,5 @@ for column, time_format in column_formats.items():
     df_women_performance[column] = df_women_performance[column].apply(lambda x: convert_to_seconds(x, column))
 
 # Save the converted data
-# df_men_performance.to_csv('D:/Users/11619/PycharmProjects/跑步记录爬取/数据/筛选后的数据/men_performance_seconds.csv', index=False)
+df_men_performance.to_csv('D:/Users/11619/PycharmProjects/跑步记录爬取/数据/筛选后的数据/men_performance_seconds.csv', index=False)
 df_women_performance.to_csv('D:/Users/11619/PycharmProjects/跑步记录爬取/数据/筛选后的数据/women_performance_seconds1.csv', index=False)
